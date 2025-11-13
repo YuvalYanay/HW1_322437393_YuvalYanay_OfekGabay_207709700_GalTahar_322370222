@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Date;
 
@@ -14,7 +15,7 @@ public class Main {
 		File file = new File("TaxFile","docs");
 		files.add(file);
 				
-		Message messBoard = new BoardMessage("Yuval","Hi, my name is Yuval and I live in Nordiya",false);
+		Message messBoard = new BoardMessage("Yuval","Hi, my name is Yuval and I live in Nordiya", new Date(),false,PriorityType.REGULAR);
 		Message messEmail = new EmailMessage("Ofek", "Hi, I'm ofek. This is an important email regarding tax issues.", new Date() ,true, "Tax issues",files ,PriorityType.URGENT);
 		
 		messages.add(messBoard);
@@ -58,17 +59,27 @@ public class Main {
 			}
 			case 3: {
 				
+				printAllMessages(messages);
+				
 				break;
 			}
 			case 4: {
+				
+				s.nextLine();
+		        System.out.println("You have " + messagesWithWords(messages,s) + " messages that includes these keywords.");
+
 				
 				break;
 			}
 			case 5: {
 				
+				printAllDigitalMessages(messages);
+				
 				break;
 			}
 			case 6: {
+				
+				showPreviewMessages(messages);
 				
 				break;
 			}
@@ -88,6 +99,90 @@ public class Main {
 		s.close();
 	}
 	
+	
+	
+	public static void showPreviewMessages(ArrayList<Message> messages) {
+		
+    for(Message m : messages) {
+			
+			if(m instanceof BoardMessage) {
+		        System.out.println(m.generatePreview());
+			}
+			else if(m instanceof EmailMessage) {
+		        System.out.println(m.generatePreview());
+			}
+			else if(m instanceof FacebookMessage){
+		        System.out.println(m.generatePreview());
+			}
+		}
+		
+	}
+	
+	public static void printAllDigitalMessages(ArrayList<Message> messages) {
+		
+		
+		for(Message m : messages) {
+			
+			if(m instanceof IDigital) {
+				
+				if(m instanceof EmailMessage) {
+			        System.out.println(m.toString());
+			        ((IDigital) m).printCommunicationMethod();
+				}
+				else if(m instanceof FacebookMessage){
+			        System.out.println(m.toString());
+			        ((IDigital) m).printCommunicationMethod();
+
+				}
+
+			}
+			
+		}
+		
+	}
+	
+	
+	public static int messagesWithWords(ArrayList<Message> messages, Scanner s) {
+		
+		int count = 0;
+		System.out.println("Type the words: ");
+		String text = s.nextLine();
+		String[] wordsArray = text.toLowerCase().trim().split("\\s+");
+		ArrayList<String> listOfWords = new ArrayList<>(Arrays.asList(wordsArray));
+
+		
+		
+       for(Message m : messages) {
+			
+    	   if(m.find(listOfWords)) {
+    		   
+    		   count++;
+    		   
+    	   }
+    	   
+       }
+       
+       return count;
+       
+	}
+	
+	
+	public static void printAllMessages(ArrayList<Message> messages) {
+		
+		for(Message m : messages) {
+			
+			if(m instanceof BoardMessage) {
+		        System.out.println(m.toString());
+			}
+			else if(m instanceof EmailMessage) {
+		        System.out.println(m.toString());
+			}
+			else if(m instanceof FacebookMessage){
+		        System.out.println(m.toString());
+			}
+		}
+		
+	}
 	
 	public static void deleteMessage(ArrayList<Message> messages, Scanner s) {
 
@@ -110,6 +205,16 @@ public class Main {
 	    	
 	    	delBoardMessage(messages,s);
 	    	
+	    }
+	    else if(choice == 2) {
+	    	
+	    	delEmailMessage(messages,s);
+	    	
+	    }
+	    else {
+	    	
+	       delFacebookMessage(messages,s);
+	       
 	    }
 		
 	}
@@ -148,6 +253,68 @@ public class Main {
 		
 		
 	}
+	
+	public static void delEmailMessage(ArrayList<Message> messages, Scanner s) {
+		
+     for(Message e : messages) {
+			
+			if(e instanceof EmailMessage) {
+		        System.out.println(e.toString());
+			}
+		}
+        System.out.println("Type which serial number to remove:");
+		int serialNum = s.nextInt();
+		
+		int current = 0;
+		
+		for(Message e : messages) {
+			
+			if(e instanceof EmailMessage) {
+				
+				if(current == serialNum - 1) {
+					
+					messages.remove(e);
+					
+				}
+				
+				current++;
+				
+			}
+		}
+		
+	}
+	
+	
+	public static void delFacebookMessage(ArrayList<Message> messages, Scanner s) {
+		
+   for(Message f : messages) {
+			
+			if(f instanceof FacebookMessage) {
+		        System.out.println(f.toString());
+			}
+		}
+        System.out.println("Type which serial number to remove:");
+		int serialNum = s.nextInt();
+		
+		int current = 0;
+		
+		for(Message f : messages) {
+			
+			if(f instanceof FacebookMessage) {
+				
+				if(current == serialNum - 1) {
+					
+					messages.remove(f);
+					
+				}
+				
+				current++;
+				
+			}
+		}
+		
+	}
+	
 	
 	public static void addMessage(ArrayList<Message> messages, Scanner s) {
 		
