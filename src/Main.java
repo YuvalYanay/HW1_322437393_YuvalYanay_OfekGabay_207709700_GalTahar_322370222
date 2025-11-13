@@ -132,7 +132,7 @@ public class Main {
 			
 			if(b instanceof BoardMessage) {
 				
-				if(current == serialNum) {
+				if(current == serialNum - 1) {
 					
 					messages.remove(b);
 					
