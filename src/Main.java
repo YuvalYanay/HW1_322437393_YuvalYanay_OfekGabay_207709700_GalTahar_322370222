@@ -16,9 +16,13 @@ public class Main {
 		files.add(file);
 				
 		Message messBoard = new BoardMessage("Yuval","Hi, my name is Yuval and I live in Nordiya", new Date(),false,PriorityType.REGULAR);
+		Message messBoard1 = new BoardMessage("Maiky","Hi, my name is Maiky and I live in Herziliya and I need to move fast to other place", new Date(),false,PriorityType.URGENT);
+		Message messBoard2 = new BoardMessage("Rom","Hi, my name is Rom and I'm sailing in the sea, please help me", new Date(),false,PriorityType.URGENT);
 		Message messEmail = new EmailMessage("Ofek", "Hi, I'm ofek. This is an important email regarding tax issues.", new Date() ,true, "Tax issues",files ,PriorityType.URGENT);
 		
 		messages.add(messBoard);
+		messages.add(messBoard1);
+		messages.add(messBoard2);
 		messages.add(messEmail);
 		
 		menu(messages);
@@ -30,7 +34,7 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 		int choice = 0;
 		
-		while(choice != 7) {
+		while(choice != 8) {
 			System.out.println("Menu:");
 			System.out.println("1. Type (1) for adding a message.");
 			System.out.println("2. Type (2) for deleting a message.");
@@ -38,7 +42,8 @@ public class Main {
 			System.out.println("4. Type (4) for seeing how many messages with words you have left.");
 			System.out.println("5. Type (5) for printing all the digital messages.");
 			System.out.println("6. Type (6) for seeing preview messages.");
-			System.out.println("7. Type (7) to exit");
+			System.out.println("7. Type (7) to see all urgent board messages.");
+			System.out.println("8. Type (8) to exit");
 
 			System.out.print("Type here: ");
 			choice = s.nextInt();
@@ -83,10 +88,18 @@ public class Main {
 				
 				break;
 			}
-			case 7: {
+			
+			case 7:{
+				
+				showUrgentBoardMessages(messages);
+				
+				break;
+			}
+			
+			case 8: {
 				
 				System.out.println("Goodbye!");
-				choice = 7;
+				choice = 8;
 				
 				break;
 			}
@@ -99,6 +112,24 @@ public class Main {
 		s.close();
 	}
 	
+	
+	
+	public static void showUrgentBoardMessages(ArrayList<Message> messages) {
+		
+		for(Message m : messages) {
+			
+			if(m instanceof BoardMessage) {
+				
+				if(((BoardMessage) m).urgentBoardMess()) {
+			        System.out.println(m.toString());
+				}
+				
+			}
+			
+		}
+		
+		
+	}
 	
 	
 	public static void showPreviewMessages(ArrayList<Message> messages) {
@@ -392,13 +423,10 @@ public class Main {
 		    s.nextLine();
 			
 			if(choiceForPriorityType == 1) {
-				messageType = PriorityType.URGENT;
-				
+				messageType = PriorityType.URGENT;	
 			} 
 			else if(choiceForPriorityType == 2) {
 				messageType = PriorityType.IMPORTANT;
-
-
 			}
 			else  {
 				messageType = PriorityType.REGULAR;
